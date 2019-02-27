@@ -53,7 +53,7 @@ app.get("/friends", (_req, res) => {
 })
 
 app.post("/friends", (req, res) => {
-  const friend = { id: getNewId(20), ...req.body }
+  const friend = { id: getNewId(friends.length), ...req.body }
   friends = [...friends, friend]
   res.status(201).json(friends)
 })
