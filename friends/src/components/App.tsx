@@ -2,6 +2,10 @@ import React, { Component } from "react"
 import { Option, some, none } from "fp-ts/lib/Option"
 import axios from "axios"
 
+import FriendsList from "./FriendsList.gen"
+import NewFriendForm from "./NewFriendForm"
+import Loading from "./Loading"
+
 import "./App.scss"
 
 interface AppState {
@@ -21,9 +25,14 @@ class App extends Component<{}, AppState> {
 
   render() {
     const { data } = this.state
-    return data.fold(<p>"Nothing to show"</p>, data => (
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    ))
+    return (
+      <>
+        {data.fold(<Loading />, data => (
+          <FriendsList data={data} />
+        ))}
+        <NewFriendForm />
+      </>
+    )
   }
 }
 
