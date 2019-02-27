@@ -20,7 +20,7 @@ function make(data, _children) {
               return React.createElement("ul", undefined, data.map((function (d) {
                                 return React.createElement("li", {
                                             key: String(d[/* id */0])
-                                          }, d[/* name */1]);
+                                          }, React.createElement("div", undefined, d[/* name */1]), React.createElement("div", undefined, String(d[/* age */2])), React.createElement("div", undefined, d[/* email */3]));
                               })));
             }),
           /* initialState */component[/* initialState */10],

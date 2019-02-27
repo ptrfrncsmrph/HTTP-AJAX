@@ -15,7 +15,9 @@ let make = (~data, _children) => {
       {data
        |> Js.Array.map((d: friend) =>
             <li key={d.id |> string_of_int}>
-              {d.name |> ReasonReact.string}
+              <div> {d.name |> ReasonReact.string} </div>
+              <div> {d.age |> string_of_int |> ReasonReact.string} </div>
+              <div> {d.email |> ReasonReact.string} </div>
             </li>
           )
        |> ReasonReact.array}

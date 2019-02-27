@@ -8,7 +8,7 @@ import Loading from "./Loading"
 
 import "./App.scss"
 
-interface Friend_ {
+export interface Friend_ {
   name: string
   age: number
   email: string
@@ -48,17 +48,12 @@ class App extends Component<{}, AppState> {
 
   render() {
     const { data } = this.state
-    const JOE = {
-      name: "Joe",
-      age: 77,
-      email: "joe@joe.joe"
-    }
     return (
       <>
         {data.fold(<Loading />, data => (
           <FriendsList data={data} />
         ))}
-        <NewFriendForm handleClick={this.addNewFriend(JOE)} />
+        <NewFriendForm handleSubmit={this.addNewFriend} />
       </>
     )
   }
