@@ -4,7 +4,11 @@ const cors = require("cors")
 
 const app = express()
 
-const getNewId = n => n + 1
+let newId = 7
+
+function getNewId() {
+  return newId++
+}
 
 let friends = [
   {
@@ -53,7 +57,7 @@ app.get("/friends", (_req, res) => {
 })
 
 app.post("/friends", (req, res) => {
-  const friend = { id: getNewId(friends.length), ...req.body }
+  const friend = { id: getNewId(), ...req.body }
   friends = [...friends, friend]
   res.status(201).json(friends)
 })

@@ -9,13 +9,11 @@ button {
   position: relative;
   width: 800px;
   max-width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   > table {
-    padding-top: 2rem;
     width: 67%;
     align-self: center;
-    overflow: scroll;
     thead {
       padding: 1rem 0 1rem;
       position: sticky;
