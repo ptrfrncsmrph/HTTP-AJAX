@@ -10,6 +10,8 @@ type action =
   | DeleteFriend(int)
   | ShowError;
 
+let apiEndpoint = "http://10.0.0.53:5000/friends";
+
 let component = ReasonReact.reducerComponent("ReasonApp");
 
 let make = _children => {
@@ -19,15 +21,15 @@ let make = _children => {
 
   reducer: action => {
     switch (action) {
-    | GetFriends =>
-      ReasonReact.UpdateWithSideEffects(
-        Loading,
-        self =>
+    | GetFriends => (
+        state => {
           Js.Promise.(
-            Axios.get("/user?ID=12345")
+            Axios.get(apiEndpoint)
             |> then_(response => resolve(Js.log(response##data)))
             |> catch(error => resolve(Js.log(error)))
-          ),
+          );
+          ReasonReact.Update(state);
+        }
       )
     };
   },
@@ -43,3 +45,6 @@ let make = _children => {
     };
   },
 };
+
+let jsComponent =
+  ReasonReact.wrapReasonForJs(~component, _jsProps => make([||]));
