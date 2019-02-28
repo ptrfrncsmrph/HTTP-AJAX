@@ -17,7 +17,7 @@ let make = (~data: Js.Array.t(friend), _children) => {
         <tr>
           {[|"Delete", "Edit", "Name", "Age", "Email"|]
            |> Js.Array.map((field: string) =>
-                <th> {field |> ReasonReact.string} </th>
+                <th key=field> {field |> ReasonReact.string} </th>
               )
            |> ReasonReact.array}
         </tr>

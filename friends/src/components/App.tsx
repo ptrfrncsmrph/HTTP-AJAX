@@ -4,6 +4,7 @@ import axios from "axios"
 
 import FriendsList, { friend } from "./FriendsList.gen"
 import NewFriendForm from "./NewFriendForm"
+import FriendForm from "./FriendForm.gen"
 import Loading from "./Loading"
 
 import "./App.scss"
@@ -14,10 +15,21 @@ export interface Friend_ {
   email: string
 }
 
+export interface UnvalidatedFriend_ {
+  name: string
+  age: string
+  email: string
+}
+
 interface AppState {
   data: Option<Array<friend>>
   error: Option<string>
 }
+
+const validate = (f: UnvalidatedFriend_) => ({
+  ...f,
+  age: parseInt(f.age)
+})
 
 const API_ENDPOINT = "http://10.0.0.53:5000/friends"
 
@@ -36,10 +48,9 @@ class App extends Component<{}, AppState> {
       })
   }
 
-  addNewFriend = (friend: Friend_) => (event: FormEvent) => {
-    event.preventDefault()
+  editFriend = (friend: UnvalidatedFriend_) => {
     axios
-      .post(API_ENDPOINT, friend)
+      .post(API_ENDPOINT, validate(friend))
       .then(({ data }) => this.setState(() => ({ data: some(data) })))
       .catch(error => {
         this.setState({ error })
@@ -53,7 +64,7 @@ class App extends Component<{}, AppState> {
         {data.fold(<Loading />, data => (
           <FriendsList data={data} />
         ))}
-        <NewFriendForm handleSubmit={this.addNewFriend} />
+        <FriendForm name="" age="" email="" handleSubmit={this.editFriend} />
       </main>
     )
   }

@@ -6,7 +6,7 @@
 
 - [x] Wireframe view for single view
 - [x] Add basic styling
-- [ ] Replace form component with `reducerComponent`
+- [x] Replace form component with `reducerComponent`
 - [ ] Replace root component with `reducerComponent`
 - [ ] Add `bs-future`
 - [ ] Replace text buttons with icons

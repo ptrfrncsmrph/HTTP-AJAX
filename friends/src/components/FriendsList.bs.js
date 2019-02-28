@@ -44,7 +44,9 @@ function make(data, _children) {
                                     "Age",
                                     "Email"
                                   ].map((function (field) {
-                                        return React.createElement("th", undefined, field);
+                                        return React.createElement("th", {
+                                                    key: field
+                                                  }, field);
                                       })))), React.createElement("tbody", undefined, data.map((function (param) {
                                     return React.createElement("tr", {
                                                 key: String(param[/* id */0])
