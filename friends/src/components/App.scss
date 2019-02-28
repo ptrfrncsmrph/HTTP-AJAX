@@ -1,8 +1,15 @@
 button {
-  background: transparent;
+  font-weight: bold;
+  background: white;
   border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 8px;
+  padding: 4px 12px;
+  transition: 200ms;
+  &:hover,
+  &:focus {
+    background: black;
+    color: white;
+  }
 }
 
 .App {
@@ -12,6 +19,7 @@ button {
   height: 100%;
   display: flex;
   > table {
+    border-collapse: collapse;
     width: 67%;
     align-self: center;
     thead {
@@ -21,8 +29,25 @@ button {
       background: white;
       th {
         padding: 1rem 0;
-        text-align: left;
         font-size: 0.8rem;
+      }
+    }
+    tbody {
+      tr:nth-child(odd) {
+        background: whitesmoke;
+      }
+      tr td:first-child {
+        text-align: center;
+      }
+      tr td:first-child {
+        opacity: 0;
+        transition: 100ms;
+      }
+      tr:hover,
+      tr:focus {
+        td:first-child {
+          opacity: 1;
+        }
       }
     }
   }
@@ -42,6 +67,7 @@ button {
         display: block;
         padding: 1rem 0;
         font-size: 0.8rem;
+        font-weight: bold;
       }
       input {
         font-size: 1rem;

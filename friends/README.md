@@ -5,7 +5,7 @@
 ### Milestones
 
 - [x] Wireframe view for single view
-- [ ] Add basic styling
+- [x] Add basic styling
 - [ ] Replace form component with `reducerComponent`
 - [ ] Replace root component with `reducerComponent`
 - [ ] Add `bs-future`
