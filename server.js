@@ -56,12 +56,14 @@ app.get("/friends", (_req, res) => {
   res.status(200).json(friends)
 })
 
+// POST is ADD
 app.post("/friends", (req, res) => {
   const friend = { id: getNewId(), ...req.body }
   friends = [...friends, friend]
   res.status(201).json(friends)
 })
 
+// PUT is UPDATE
 app.put("/friends/:id", (req, res) => {
   const { id } = req.params
   let friendIndex = friends.findIndex(friend => friend.id == id)

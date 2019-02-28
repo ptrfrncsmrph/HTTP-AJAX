@@ -4,9 +4,21 @@ import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Axios from "axios";
 import * as React from "react";
+import * as Json_decode from "@glennsl/bs-json/src/Json_decode.bs.js";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 import * as FriendsList$Friends from "./FriendsList.bs.js";
 import * as Caml_builtin_exceptions from "bs-platform/lib/es6/caml_builtin_exceptions.js";
+
+function friend(json) {
+  return /* record */[
+          /* id */Json_decode.field("id", Json_decode.$$int, json),
+          /* name */Json_decode.field("name", Json_decode.string, json),
+          /* age */Json_decode.field("age", Json_decode.$$int, json),
+          /* email */Json_decode.field("email", Json_decode.string, json)
+        ];
+}
+
+var Decode = /* module */[/* friend */friend];
 
 var apiEndpoint = "http://10.0.0.53:5000/friends";
 
@@ -33,7 +45,7 @@ function make(_children) {
                         Caml_builtin_exceptions.match_failure,
                         /* tuple */[
                           "ReasonApp.re",
-                          41,
+                          70,
                           29
                         ]
                       ];
@@ -48,36 +60,43 @@ function make(_children) {
               return /* Loading */0;
             }),
           /* retainedProps */component[/* retainedProps */11],
-          /* reducer */(function (action) {
+          /* reducer */(function (action, _state) {
               if (typeof action === "number") {
-                if (action !== 0) {
+                if (action === 0) {
+                  return /* UpdateWithSideEffects */Block.__(2, [
+                            /* Loading */0,
+                            (function (self) {
+                                Axios.get(apiEndpoint).then((function (response) {
+                                          var data = response.data;
+                                          var fs = Json_decode.array(friend, (console.log(data), data));
+                                          return Promise.resolve(Curry._1(self[/* send */3], /* FriendsGot */Block.__(0, [fs])));
+                                        })).catch((function (err) {
+                                        return Promise.resolve((console.log(err), /* () */0));
+                                      }));
+                                return /* () */0;
+                              })
+                          ]);
+                } else {
                   throw [
                         Caml_builtin_exceptions.match_failure,
                         /* tuple */[
                           "ReasonApp.re",
-                          22,
-                          21
+                          35,
+                          31
                         ]
                       ];
-                } else {
-                  return (function (state) {
-                      Axios.get(apiEndpoint).then((function (response) {
-                                return Promise.resolve((console.log(response.data), /* () */0));
-                              })).catch((function (error) {
-                              return Promise.resolve((console.log(error), /* () */0));
-                            }));
-                      return /* Update */Block.__(0, [state]);
-                    });
                 }
-              } else {
+              } else if (action.tag) {
                 throw [
                       Caml_builtin_exceptions.match_failure,
                       /* tuple */[
                         "ReasonApp.re",
-                        22,
-                        21
+                        35,
+                        31
                       ]
                     ];
+              } else {
+                return /* Update */Block.__(0, [/* Loaded */[action[0]]]);
               }
             }),
           /* jsElementWrapped */component[/* jsElementWrapped */13]
@@ -89,6 +108,7 @@ var jsComponent = ReasonReact.wrapReasonForJs(component, (function (_jsProps) {
       }));
 
 export {
+  Decode ,
   apiEndpoint ,
   component ,
   make ,
