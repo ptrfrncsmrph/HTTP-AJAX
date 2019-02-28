@@ -49,12 +49,12 @@ class App extends Component<{}, AppState> {
   render() {
     const { data } = this.state
     return (
-      <>
+      <main className="App">
         {data.fold(<Loading />, data => (
           <FriendsList data={data} />
         ))}
         <NewFriendForm handleSubmit={this.addNewFriend} />
-      </>
+      </main>
     )
   }
 }

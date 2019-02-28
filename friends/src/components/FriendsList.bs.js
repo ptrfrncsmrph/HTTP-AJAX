@@ -5,6 +5,24 @@ import * as ReasonReact from "reason-react/src/ReasonReact.js";
 
 var component = ReasonReact.statelessComponent("FriendsList");
 
+function friendToJs(param) {
+  return {
+          id: param[/* id */0],
+          name: param[/* name */1],
+          age: param[/* age */2],
+          email: param[/* email */3]
+        };
+}
+
+function friendFromJs(param) {
+  return /* record */[
+          /* id */param.id,
+          /* name */param.name,
+          /* age */param.age,
+          /* email */param.email
+        ];
+}
+
 function make(data, _children) {
   return /* record */[
           /* debugName */component[/* debugName */0],
@@ -17,11 +35,20 @@ function make(data, _children) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (_self) {
-              return React.createElement("ul", undefined, data.map((function (d) {
-                                return React.createElement("li", {
-                                            key: String(d[/* id */0])
-                                          }, React.createElement("div", undefined, d[/* name */1]), React.createElement("div", undefined, String(d[/* age */2])), React.createElement("div", undefined, d[/* email */3]));
-                              })));
+              return React.createElement("table", {
+                          className: "friends"
+                        }, React.createElement("thead", undefined, React.createElement("tr", undefined, /* array */[
+                                    "Edit",
+                                    "Name",
+                                    "Age",
+                                    "Email"
+                                  ].map((function (field) {
+                                        return React.createElement("th", undefined, field);
+                                      })))), React.createElement("tbody", undefined, data.map((function (param) {
+                                    return React.createElement("tr", {
+                                                key: String(param[/* id */0])
+                                              }, React.createElement("td", undefined, React.createElement("button", undefined, "Edit")), React.createElement("td", undefined, param[/* name */1]), React.createElement("td", undefined, String(param[/* age */2])), React.createElement("td", undefined, param[/* email */3]));
+                                  }))));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],
@@ -32,6 +59,8 @@ function make(data, _children) {
 
 export {
   component ,
+  friendToJs ,
+  friendFromJs ,
   make ,
   
 }

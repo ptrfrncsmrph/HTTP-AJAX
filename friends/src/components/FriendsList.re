@@ -1,5 +1,6 @@
 let component = ReasonReact.statelessComponent("FriendsList");
 
+[@bs.deriving jsConverter]
 type friend = {
   id: int,
   name: string,
@@ -8,19 +9,31 @@ type friend = {
 };
 
 [@genType]
-let make = (~data, _children) => {
+let make = (~data: Js.Array.t(friend), _children) => {
   ...component,
   render: _self => {
-    <ul>
-      {data
-       |> Js.Array.map((d: friend) =>
-            <li key={d.id |> string_of_int}>
-              <div> {d.name |> ReasonReact.string} </div>
-              <div> {d.age |> string_of_int |> ReasonReact.string} </div>
-              <div> {d.email |> ReasonReact.string} </div>
-            </li>
-          )
-       |> ReasonReact.array}
-    </ul>;
+    <table className="friends">
+      <thead>
+        <tr>
+          {[|"Edit", "Name", "Age", "Email"|]
+           |> Js.Array.map((field: string) =>
+                <th> {field |> ReasonReact.string} </th>
+              )
+           |> ReasonReact.array}
+        </tr>
+      </thead>
+      <tbody>
+        {data
+         |> Js.Array.map(({id, name, age, email}: friend) =>
+              <tr key={id |> string_of_int}>
+                <td> <button> {"Edit" |> ReasonReact.string} </button> </td>
+                <td> {name |> ReasonReact.string} </td>
+                <td> {age |> string_of_int |> ReasonReact.string} </td>
+                <td> {email |> ReasonReact.string} </td>
+              </tr>
+            )
+         |> ReasonReact.array}
+      </tbody>
+    </table>;
   },
 };

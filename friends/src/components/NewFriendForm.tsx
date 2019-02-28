@@ -30,18 +30,25 @@ export default ({ handleSubmit }: NewFriendFormProps) => {
   const { name, age, email } = state
   return (
     <form onSubmit={handleSubmit(validate(state))}>
-      <label>
-        Name
-        <input type="text" name="name" value={name} onChange={handleChange} />
-      </label>
-      <label>
-        Age
-        <input type="text" name="age" value={age} onChange={handleChange} />
-      </label>
-      <label>
-        Email
-        <input type="text" name="email" value={email} onChange={handleChange} />
-      </label>
+      <div className="input-container">
+        <label>
+          Name
+          <input type="text" name="name" value={name} onChange={handleChange} />
+        </label>
+        <label>
+          Age
+          <input type="text" name="age" value={age} onChange={handleChange} />
+        </label>
+        <label>
+          Email
+          <input
+            type="text"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
       <button>Add new friend</button>
     </form>
   )
