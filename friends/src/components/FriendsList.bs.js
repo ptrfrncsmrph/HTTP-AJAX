@@ -38,6 +38,7 @@ function make(data, _children) {
               return React.createElement("table", {
                           className: "friends"
                         }, React.createElement("thead", undefined, React.createElement("tr", undefined, /* array */[
+                                    "Delete",
                                     "Edit",
                                     "Name",
                                     "Age",
@@ -47,7 +48,9 @@ function make(data, _children) {
                                       })))), React.createElement("tbody", undefined, data.map((function (param) {
                                     return React.createElement("tr", {
                                                 key: String(param[/* id */0])
-                                              }, React.createElement("td", undefined, React.createElement("button", undefined, "Edit")), React.createElement("td", undefined, param[/* name */1]), React.createElement("td", undefined, String(param[/* age */2])), React.createElement("td", undefined, param[/* email */3]));
+                                              }, React.createElement("td", undefined, React.createElement("button", {
+                                                        className: "danger"
+                                                      }, "Delete")), React.createElement("td", undefined, React.createElement("button", undefined, "Edit")), React.createElement("td", undefined, param[/* name */1]), React.createElement("td", undefined, String(param[/* age */2])), React.createElement("td", undefined, param[/* email */3]));
                                   }))));
             }),
           /* initialState */component[/* initialState */10],

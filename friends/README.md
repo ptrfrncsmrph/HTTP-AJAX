@@ -9,6 +9,7 @@
 - [ ] Replace form component with `reducerComponent`
 - [ ] Replace root component with `reducerComponent`
 - [ ] Add `bs-future`
+- [ ] Replace text buttons with icons
 
 #### Form
 

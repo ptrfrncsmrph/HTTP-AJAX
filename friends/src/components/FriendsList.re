@@ -15,7 +15,7 @@ let make = (~data: Js.Array.t(friend), _children) => {
     <table className="friends">
       <thead>
         <tr>
-          {[|"Edit", "Name", "Age", "Email"|]
+          {[|"Delete", "Edit", "Name", "Age", "Email"|]
            |> Js.Array.map((field: string) =>
                 <th> {field |> ReasonReact.string} </th>
               )
@@ -26,6 +26,11 @@ let make = (~data: Js.Array.t(friend), _children) => {
         {data
          |> Js.Array.map(({id, name, age, email}: friend) =>
               <tr key={id |> string_of_int}>
+                <td>
+                  <button className="danger">
+                    {"Delete" |> ReasonReact.string}
+                  </button>
+                </td>
                 <td> <button> {"Edit" |> ReasonReact.string} </button> </td>
                 <td> {name |> ReasonReact.string} </td>
                 <td> {age |> string_of_int |> ReasonReact.string} </td>

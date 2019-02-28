@@ -12,6 +12,17 @@ button {
   }
 }
 
+button.danger {
+  color: tomato;
+  background: white;
+  border: 1px solid tomato;
+  &:hover,
+  &:focus {
+    background: tomato;
+    color: white;
+  }
+}
+
 .App {
   position: relative;
   width: 800px;
@@ -39,13 +50,17 @@ button {
       tr td:first-child {
         text-align: center;
       }
-      tr td:first-child {
-        opacity: 0;
-        transition: 100ms;
+      tr {
+        td:first-child,
+        td:nth-child(2) {
+          opacity: 0;
+          transition: 100ms;
+        }
       }
       tr:hover,
       tr:focus {
-        td:first-child {
+        td:first-child,
+        td:nth-child(2) {
           opacity: 1;
         }
       }
