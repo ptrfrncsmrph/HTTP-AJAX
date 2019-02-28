@@ -3,7 +3,6 @@ import { Option, some, none } from "fp-ts/lib/Option"
 import axios from "axios"
 
 import FriendsList, { friend } from "./FriendsList.gen"
-import NewFriendForm from "./NewFriendForm"
 import FriendForm from "./FriendForm.gen"
 import Loading from "./Loading"
 

@@ -5,34 +5,58 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 
-function stateToJs(param) {
+function validatedFriendToJs(param) {
   return {
           name: param[/* name */0],
           age: param[/* age */1],
-          email: param[/* email */2]
+          email: param[/* email */2],
+          id: param[/* id */3]
         };
 }
 
-function stateFromJs(param) {
+function validatedFriendFromJs(param) {
   return /* record */[
           /* name */param.name,
           /* age */param.age,
-          /* email */param.email
+          /* email */param.email,
+          /* id */param.id
+        ];
+}
+
+function unvalidatedFriendToJs(param) {
+  return {
+          name: param[/* name */0],
+          age: param[/* age */1],
+          email: param[/* email */2],
+          id: param[/* id */3]
+        };
+}
+
+function unvalidatedFriendFromJs(param) {
+  return /* record */[
+          /* name */param.name,
+          /* age */param.age,
+          /* email */param.email,
+          /* id */param.id
         ];
 }
 
 var component = ReasonReact.reducerComponent("FriendForm");
 
-function make(name, age, email, handleSubmit, _children) {
+function make(friend, handleSubmit, _children) {
   var handleSubmit_ = function (state) {
-    Curry._1(handleSubmit, stateToJs(state));
-    console.log(stateToJs(state));
+    Curry._1(handleSubmit, state);
     return /* Update */Block.__(0, [/* record */[
                 /* name */"",
                 /* age */"",
-                /* email */""
+                /* email */"",
+                /* id */undefined
               ]]);
   };
+  var id = friend[/* id */3];
+  var email = friend[/* email */2];
+  var age = friend[/* age */1];
+  var name = friend[/* name */0];
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -83,7 +107,8 @@ function make(name, age, email, handleSubmit, _children) {
               return /* record */[
                       /* name */name,
                       /* age */age,
-                      /* email */email
+                      /* email */email,
+                      /* id */id
                     ];
             }),
           /* retainedProps */component[/* retainedProps */11],
@@ -96,7 +121,8 @@ function make(name, age, email, handleSubmit, _children) {
                           return /* Update */Block.__(0, [/* record */[
                                       /* name */str,
                                       /* age */state[/* age */1],
-                                      /* email */state[/* email */2]
+                                      /* email */state[/* email */2],
+                                      /* id */state[/* id */3]
                                     ]]);
                         });
                   case 1 : 
@@ -105,7 +131,8 @@ function make(name, age, email, handleSubmit, _children) {
                           return /* Update */Block.__(0, [/* record */[
                                       /* name */state[/* name */0],
                                       /* age */str$1,
-                                      /* email */state[/* email */2]
+                                      /* email */state[/* email */2],
+                                      /* id */state[/* id */3]
                                     ]]);
                         });
                   case 2 : 
@@ -114,7 +141,8 @@ function make(name, age, email, handleSubmit, _children) {
                           return /* Update */Block.__(0, [/* record */[
                                       /* name */state[/* name */0],
                                       /* age */state[/* age */1],
-                                      /* email */str$2
+                                      /* email */str$2,
+                                      /* id */state[/* id */3]
                                     ]]);
                         });
                   
@@ -128,8 +156,10 @@ function make(name, age, email, handleSubmit, _children) {
 }
 
 export {
-  stateToJs ,
-  stateFromJs ,
+  validatedFriendToJs ,
+  validatedFriendFromJs ,
+  unvalidatedFriendToJs ,
+  unvalidatedFriendFromJs ,
   component ,
   make ,
   

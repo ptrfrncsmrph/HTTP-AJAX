@@ -8,26 +8,35 @@ type action =
   | Submit;
 
 [@bs.deriving jsConverter]
-type state = {
+type validatedFriend = {
+  name: string,
+  age: int,
+  email: string,
+  id: option(int),
+};
+
+[@bs.deriving jsConverter]
+type unvalidatedFriend = {
   name: string,
   age: string,
   email: string,
+  id: option(int),
 };
 
 let component = ReasonReact.reducerComponent("FriendForm");
 
 [@genType]
-let make = (~name, ~age, ~email, ~handleSubmit, _children) => {
+let make = (~friend: unvalidatedFriend, ~handleSubmit, _children) => {
   let handleSubmit_ = state => {
-    handleSubmit(state->stateToJs);
-    Js.log(state->stateToJs);
-    ReasonReact.Update({name: "", age: "", email: ""});
+    handleSubmit(state);
+    ReasonReact.Update({name: "", age: "", email: "", id: None});
   };
+  let {name, age, email, id} = friend;
 
   {
     ...component,
 
-    initialState: () => {name, age, email},
+    initialState: () => {name, age, email, id},
 
     reducer: action => {
       switch (action) {
