@@ -7,7 +7,6 @@ import * as React from "react";
 import * as Json_decode from "@glennsl/bs-json/src/Json_decode.bs.js";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 import * as FriendsList$Friends from "./FriendsList.bs.js";
-import * as Caml_builtin_exceptions from "bs-platform/lib/es6/caml_builtin_exceptions.js";
 
 function friend(json) {
   return /* record */[
@@ -40,20 +39,11 @@ function make(_children) {
           /* render */(function (param) {
               var state = param[/* state */1];
               if (typeof state === "number") {
-                if (state !== 0) {
-                  throw [
-                        Caml_builtin_exceptions.match_failure,
-                        /* tuple */[
-                          "ReasonApp.re",
-                          70,
-                          29
-                        ]
-                      ];
-                } else {
-                  return React.createElement("div", undefined, "Loading");
-                }
-              } else {
+                return React.createElement("div", undefined, "Loading");
+              } else if (state.tag) {
                 return ReasonReact.element(undefined, undefined, FriendsList$Friends.make(state[0], /* array */[]));
+              } else {
+                return React.createElement("div", undefined, "Error");
               }
             }),
           /* initialState */(function (_state) {
@@ -62,41 +52,29 @@ function make(_children) {
           /* retainedProps */component[/* retainedProps */11],
           /* reducer */(function (action, _state) {
               if (typeof action === "number") {
-                if (action === 0) {
-                  return /* UpdateWithSideEffects */Block.__(2, [
-                            /* Loading */0,
-                            (function (self) {
-                                Axios.get(apiEndpoint).then((function (response) {
-                                          var data = response.data;
-                                          var fs = Json_decode.array(friend, (console.log(data), data));
-                                          return Promise.resolve(Curry._1(self[/* send */3], /* FriendsGot */Block.__(0, [fs])));
-                                        })).catch((function (err) {
-                                        return Promise.resolve((console.log(err), /* () */0));
-                                      }));
-                                return /* () */0;
-                              })
-                          ]);
-                } else {
-                  throw [
-                        Caml_builtin_exceptions.match_failure,
-                        /* tuple */[
-                          "ReasonApp.re",
-                          35,
-                          31
-                        ]
-                      ];
-                }
-              } else if (action.tag) {
-                throw [
-                      Caml_builtin_exceptions.match_failure,
-                      /* tuple */[
-                        "ReasonApp.re",
-                        35,
-                        31
-                      ]
-                    ];
+                return /* UpdateWithSideEffects */Block.__(2, [
+                          /* Loading */0,
+                          (function (param) {
+                              var send = param[/* send */3];
+                              Axios.get(apiEndpoint).then((function (response) {
+                                        var data = response.data;
+                                        var fs = Json_decode.array(friend, (console.log(data), data));
+                                        return Promise.resolve(Curry._1(send, /* FriendsGot */Block.__(0, [fs])));
+                                      })).catch((function (err) {
+                                      return Promise.resolve(Curry._1(send, /* GotError */Block.__(4, [err])));
+                                    }));
+                              return /* () */0;
+                            })
+                        ]);
               } else {
-                return /* Update */Block.__(0, [/* Loaded */[action[0]]]);
+                switch (action.tag | 0) {
+                  case 0 : 
+                      return /* Update */Block.__(0, [/* Loaded */Block.__(1, [action[0]])]);
+                  case 4 : 
+                      return /* Update */Block.__(0, [/* Error */Block.__(0, [action[0]])]);
+                  default:
+                    return /* NoUpdate */0;
+                }
               }
             }),
           /* jsElementWrapped */component[/* jsElementWrapped */13]

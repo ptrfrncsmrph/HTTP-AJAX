@@ -1,6 +1,6 @@
 type state =
   | Loading
-  | Error
+  | Error(Js.Promise.error)
   | Loaded(Js.Array.t(FriendsList.friend));
 
 type action =
@@ -9,7 +9,7 @@ type action =
   | PostFriend(FriendForm.unvalidatedFriend)
   | PutFriend(int, FriendForm.unvalidatedFriend)
   | DeleteFriend(int)
-  | ShowError;
+  | GotError(Js.Promise.error);
 
 open FriendsList;
 
@@ -37,7 +37,7 @@ let make = _children => {
     | GetFriends =>
       ReasonReact.UpdateWithSideEffects(
         Loading,
-        self => {
+        ({send}) =>
           Js.Promise.(
             Axios.get(apiEndpoint)
             |> then_(response =>
@@ -48,18 +48,20 @@ let make = _children => {
                        Js.log(data);
                        data;
                      }
-                     //  |> Json.parseOrRaise
                      |> Json.Decode.(array(Decode.friend))
-                     |> (fs => self.send(FriendsGot(fs)))
+                     |> (fs => send(FriendsGot(fs)))
                      |> resolve
                  )
                )
-            |> catch(err => err |> Js.log |> resolve)
-          );
-          ();
-        },
+            |> catch(err => send(GotError(err)) |> resolve)
+            |> ignore
+          ),
       )
     | FriendsGot(fs) => ReasonReact.Update(Loaded(fs))
+    | PostFriend(_) => ReasonReact.NoUpdate
+    | PutFriend(_, _) => ReasonReact.NoUpdate
+    | DeleteFriend(_) => ReasonReact.NoUpdate
+    | GotError(err) => ReasonReact.Update(Error(err))
     };
   },
 
@@ -71,6 +73,7 @@ let make = _children => {
     switch (state) {
     | Loading => <div> {"Loading" |> ReasonReact.string} </div>
     | Loaded(data) => <FriendsList data />
+    | Error(_err) => <div> {"Error" |> ReasonReact.string} </div>
     };
   },
 };
