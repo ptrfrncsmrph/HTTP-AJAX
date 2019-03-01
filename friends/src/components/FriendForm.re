@@ -21,6 +21,8 @@ type unvalidatedFriend = {
   email: string,
 };
 
+type retainedProps = {initState: unvalidatedFriend};
+
 let emptyFriend: unvalidatedFriend = {name: "", email: "", age: ""};
 
 let toUnvalidated =
@@ -28,45 +30,60 @@ let toUnvalidated =
   {name, email, age: string_of_int(age_)};
 };
 
-let component = ReasonReact.reducerComponent("FriendForm");
+let component = ReasonReact.reducerComponentWithRetainedProps("FriendForm");
 
-[@genType]
-let make = (~initState, ~handleSubmit, _children) => {
+// [@genType]
+let make = (~initState=emptyFriend, ~handleSubmit, _children) => {
   {
     ...component,
 
     initialState: () => emptyFriend,
+    // initialState: () => {
+    //   switch (initState) {
+    //   | None => emptyFriend
+    //   | Some(f) => toUnvalidated(f)
+    //   };
+    // },
+    // initialState: () => initState,
 
-    reducer: action => {
+    retainedProps: initState,
+
+    willReceiveProps: self =>
+      if (self.retainedProps == initState) {
+        initState;
+      } else {
+        initState;
+      },
+
+    reducer: (action, state) => {
       switch (action) {
-      | ChangeField(Name, str) => (
-          state => ReasonReact.Update({...state, name: str})
-        )
-      | ChangeField(Age, str) => (
-          state => ReasonReact.Update({...state, age: str})
-        )
-      | ChangeField(Email, str) => (
-          state => ReasonReact.Update({...state, email: str})
-        )
-      | Submit => (
-          state => {
-            handleSubmit(state);
-            ReasonReact.Update(emptyFriend);
-          }
-        )
+      | ChangeField(Name, str) => ReasonReact.Update({...state, name: str})
+      | ChangeField(Age, str) => ReasonReact.Update({...state, age: str})
+      | ChangeField(Email, str) => ReasonReact.Update({...state, email: str})
+      | Submit =>
+        handleSubmit(state);
+        ReasonReact.Update(emptyFriend);
       };
     },
 
-    render: ({send}) => {
-      let {name, age, email} =
-        switch (initState) {
-        | None => emptyFriend
-        | Some(f) => toUnvalidated(f)
-        };
+    didMount: _ => {
+      Js.log("Mounted");
+    },
+
+    render: self => {
+      // Js.log(self);
+      // Js.log(("sanity", sanity));
+      // Js.log(("initState", initState));
+      let {name, age, email} = self.state;
+      // let {name, age, email} =
+      //   switch (initState) {
+      //   | None => emptyFriend
+      //   | Some(f) => toUnvalidated(f)
+      //   };
       <form
         onSubmit={e => {
           ReactEvent.Form.preventDefault(e);
-          send(Submit);
+          self.send(Submit);
         }}>
         <div className="input-container">
           <label>
@@ -74,7 +91,9 @@ let make = (~initState, ~handleSubmit, _children) => {
             <input
               value=name
               onChange={e =>
-                send(ChangeField(Name, ReactEvent.Form.target(e)##value))
+                self.send(
+                  ChangeField(Name, ReactEvent.Form.target(e)##value),
+                )
               }
             />
           </label>
@@ -83,7 +102,9 @@ let make = (~initState, ~handleSubmit, _children) => {
             <input
               value=age
               onChange={e =>
-                send(ChangeField(Age, ReactEvent.Form.target(e)##value))
+                self.send(
+                  ChangeField(Age, ReactEvent.Form.target(e)##value),
+                )
               }
             />
           </label>
@@ -92,7 +113,9 @@ let make = (~initState, ~handleSubmit, _children) => {
             <input
               value=email
               onChange={e =>
-                send(ChangeField(Email, ReactEvent.Form.target(e)##value))
+                self.send(
+                  ChangeField(Email, ReactEvent.Form.target(e)##value),
+                )
               }
             />
           </label>

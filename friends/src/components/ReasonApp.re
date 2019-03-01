@@ -95,7 +95,7 @@ let make = _children => {
            {switch (e) {
             | EditingExistent(f) =>
               <FriendForm
-                initState={Some(f)}
+                initState={FriendForm.toUnvalidated(f)}
                 handleSubmit={({name, age: age_, email}) =>
                   send(
                     PutFriend(
@@ -107,7 +107,6 @@ let make = _children => {
               />
             | EditingNew =>
               <FriendForm
-                initState=None
                 handleSubmit={({name, age: age_, email}) =>
                   send(PostFriend({name, age: int_of_string(age_), email}))
                 }

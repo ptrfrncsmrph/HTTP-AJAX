@@ -52,7 +52,7 @@ function make(_children) {
                 var tmp$1;
                 if (e) {
                   var f = e[0];
-                  tmp$1 = ReasonReact.element(undefined, undefined, FriendForm$Friends.make(f, (function (param) {
+                  tmp$1 = ReasonReact.element(undefined, undefined, FriendForm$Friends.make(FriendForm$Friends.toUnvalidated(f), (function (param) {
                               return Curry._1(send, /* PutFriend */Block.__(3, [
                                             f[/* id */0],
                                             /* record */[

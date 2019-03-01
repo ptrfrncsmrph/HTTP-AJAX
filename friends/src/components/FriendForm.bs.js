@@ -3,6 +3,7 @@
 import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
+import * as Caml_obj from "bs-platform/lib/es6/caml_obj.js";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 
 function validatedFriendToJs(param) {
@@ -35,33 +36,39 @@ function toUnvalidated(param) {
         ];
 }
 
-var component = ReasonReact.reducerComponent("FriendForm");
+var component = ReasonReact.reducerComponentWithRetainedProps("FriendForm");
 
-function make(initState, handleSubmit, _children) {
+function make($staropt$star, handleSubmit, _children) {
+  var initState = $staropt$star !== undefined ? $staropt$star : emptyFriend;
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
           /* handedOffState */component[/* handedOffState */2],
-          /* willReceiveProps */component[/* willReceiveProps */3],
-          /* didMount */component[/* didMount */4],
+          /* willReceiveProps */(function (self) {
+              Caml_obj.caml_equal(self[/* retainedProps */2], initState);
+              return initState;
+            }),
+          /* didMount */(function (param) {
+              console.log("Mounted");
+              return /* () */0;
+            }),
           /* didUpdate */component[/* didUpdate */5],
           /* willUnmount */component[/* willUnmount */6],
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
-          /* render */(function (param) {
-              var send = param[/* send */3];
-              var match = initState !== undefined ? toUnvalidated(initState) : emptyFriend;
+          /* render */(function (self) {
+              var match = self[/* state */1];
               return React.createElement("form", {
                           onSubmit: (function (e) {
                               e.preventDefault();
-                              return Curry._1(send, /* Submit */0);
+                              return Curry._1(self[/* send */3], /* Submit */0);
                             })
                         }, React.createElement("div", {
                               className: "input-container"
                             }, React.createElement("label", undefined, "Name", React.createElement("input", {
                                       value: match[/* name */0],
                                       onChange: (function (e) {
-                                          return Curry._1(send, /* ChangeField */[
+                                          return Curry._1(self[/* send */3], /* ChangeField */[
                                                       /* Name */0,
                                                       e.target.value
                                                     ]);
@@ -69,7 +76,7 @@ function make(initState, handleSubmit, _children) {
                                     })), React.createElement("label", undefined, "Age", React.createElement("input", {
                                       value: match[/* age */1],
                                       onChange: (function (e) {
-                                          return Curry._1(send, /* ChangeField */[
+                                          return Curry._1(self[/* send */3], /* ChangeField */[
                                                       /* Age */1,
                                                       e.target.value
                                                     ]);
@@ -77,7 +84,7 @@ function make(initState, handleSubmit, _children) {
                                     })), React.createElement("label", undefined, "Email", React.createElement("input", {
                                       value: match[/* email */2],
                                       onChange: (function (e) {
-                                          return Curry._1(send, /* ChangeField */[
+                                          return Curry._1(self[/* send */3], /* ChangeField */[
                                                       /* Email */2,
                                                       e.target.value
                                                     ]);
@@ -87,44 +94,33 @@ function make(initState, handleSubmit, _children) {
           /* initialState */(function (param) {
               return emptyFriend;
             }),
-          /* retainedProps */component[/* retainedProps */11],
-          /* reducer */(function (action) {
+          /* retainedProps */initState,
+          /* reducer */(function (action, state) {
               if (action) {
                 switch (action[0]) {
                   case 0 : 
-                      var str = action[1];
-                      return (function (state) {
-                          return /* Update */Block.__(0, [/* record */[
-                                      /* name */str,
-                                      /* age */state[/* age */1],
-                                      /* email */state[/* email */2]
-                                    ]]);
-                        });
+                      return /* Update */Block.__(0, [/* record */[
+                                  /* name */action[1],
+                                  /* age */state[/* age */1],
+                                  /* email */state[/* email */2]
+                                ]]);
                   case 1 : 
-                      var str$1 = action[1];
-                      return (function (state) {
-                          return /* Update */Block.__(0, [/* record */[
-                                      /* name */state[/* name */0],
-                                      /* age */str$1,
-                                      /* email */state[/* email */2]
-                                    ]]);
-                        });
+                      return /* Update */Block.__(0, [/* record */[
+                                  /* name */state[/* name */0],
+                                  /* age */action[1],
+                                  /* email */state[/* email */2]
+                                ]]);
                   case 2 : 
-                      var str$2 = action[1];
-                      return (function (state) {
-                          return /* Update */Block.__(0, [/* record */[
-                                      /* name */state[/* name */0],
-                                      /* age */state[/* age */1],
-                                      /* email */str$2
-                                    ]]);
-                        });
+                      return /* Update */Block.__(0, [/* record */[
+                                  /* name */state[/* name */0],
+                                  /* age */state[/* age */1],
+                                  /* email */action[1]
+                                ]]);
                   
                 }
               } else {
-                return (function (state) {
-                    Curry._1(handleSubmit, state);
-                    return /* Update */Block.__(0, [emptyFriend]);
-                  });
+                Curry._1(handleSubmit, state);
+                return /* Update */Block.__(0, [emptyFriend]);
               }
             }),
           /* jsElementWrapped */component[/* jsElementWrapped */13]
