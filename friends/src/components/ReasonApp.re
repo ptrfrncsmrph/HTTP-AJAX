@@ -75,7 +75,25 @@ let make = _children => {
           ),
       )
     | EditFriend(f) => ReasonReact.Update((s, EditingExistent(f)))
-    | PutFriend(_, _) => ReasonReact.NoUpdate
+    | PutFriend(id, f) =>
+      ReasonReact.UpdateWithSideEffects(
+        (s, EditingNew),
+        ({send}) =>
+          Js.Promise.(
+            Axios.putData(
+              apiEndpoint ++ "/" ++ string_of_int(id),
+              FriendForm.validatedFriendToJs(f),
+            )
+            |> then_(response =>
+                 response##data
+                 |> Json.Decode.(array(Decode.friend))
+                 |> (fs => send(FriendsGot(fs)))
+                 |> resolve
+               )
+            |> catch(err => send(GotError(err)) |> resolve)
+            |> ignore
+          ),
+      )
     | DeleteFriend(_) => ReasonReact.NoUpdate
     | GotError(err) => ReasonReact.Update((Error(err), EditingNew))
     };

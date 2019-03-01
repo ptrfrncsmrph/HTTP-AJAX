@@ -138,6 +138,24 @@ function make(_children) {
                                   /* EditingExistent */[action[0]]
                                 ]]);
                   case 3 : 
+                      var f$1 = action[1];
+                      var id = action[0];
+                      return /* UpdateWithSideEffects */Block.__(2, [
+                                /* tuple */[
+                                  s,
+                                  /* EditingNew */0
+                                ],
+                                (function (param) {
+                                    var send = param[/* send */3];
+                                    Axios.put(apiEndpoint + ("/" + String(id)), FriendForm$Friends.validatedFriendToJs(f$1)).then((function (response) {
+                                              var fs = Json_decode.array(friend, response.data);
+                                              return Promise.resolve(Curry._1(send, /* FriendsGot */Block.__(0, [fs])));
+                                            })).catch((function (err) {
+                                            return Promise.resolve(Curry._1(send, /* GotError */Block.__(5, [err])));
+                                          }));
+                                    return /* () */0;
+                                  })
+                              ]);
                   case 4 : 
                       return /* NoUpdate */0;
                   case 5 : 
