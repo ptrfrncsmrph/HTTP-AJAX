@@ -5,30 +5,11 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 
-function validatedFriendToJs(param) {
-  return {
-          name: param[/* name */0],
-          age: param[/* age */1],
-          email: param[/* email */2],
-          id: param[/* id */3]
-        };
-}
-
-function validatedFriendFromJs(param) {
-  return /* record */[
-          /* name */param.name,
-          /* age */param.age,
-          /* email */param.email,
-          /* id */param.id
-        ];
-}
-
 function unvalidatedFriendToJs(param) {
   return {
           name: param[/* name */0],
           age: param[/* age */1],
-          email: param[/* email */2],
-          id: param[/* id */3]
+          email: param[/* email */2]
         };
 }
 
@@ -36,27 +17,31 @@ function unvalidatedFriendFromJs(param) {
   return /* record */[
           /* name */param.name,
           /* age */param.age,
-          /* email */param.email,
-          /* id */param.id
+          /* email */param.email
+        ];
+}
+
+var emptyFriend = /* record */[
+  /* name */"",
+  /* age */"",
+  /* email */""
+];
+
+function toUnvalidated(param) {
+  return /* record */[
+          /* name */param[/* name */1],
+          /* age */String(param[/* age */2]),
+          /* email */param[/* email */3]
         ];
 }
 
 var component = ReasonReact.reducerComponent("FriendForm");
 
-function make(friend, handleSubmit, _children) {
+function make(initState, handleSubmit, _children) {
   var handleSubmit_ = function (state) {
     Curry._1(handleSubmit, state);
-    return /* Update */Block.__(0, [/* record */[
-                /* name */"",
-                /* age */"",
-                /* email */"",
-                /* id */undefined
-              ]]);
+    return /* Update */Block.__(0, [emptyFriend]);
   };
-  var id = friend[/* id */3];
-  var email = friend[/* email */2];
-  var age = friend[/* age */1];
-  var name = friend[/* name */0];
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -104,12 +89,11 @@ function make(friend, handleSubmit, _children) {
                                     }))), React.createElement("button", undefined, "Submit"));
             }),
           /* initialState */(function (param) {
-              return /* record */[
-                      /* name */name,
-                      /* age */age,
-                      /* email */email,
-                      /* id */id
-                    ];
+              if (initState !== undefined) {
+                return toUnvalidated(initState);
+              } else {
+                return emptyFriend;
+              }
             }),
           /* retainedProps */component[/* retainedProps */11],
           /* reducer */(function (action) {
@@ -121,8 +105,7 @@ function make(friend, handleSubmit, _children) {
                           return /* Update */Block.__(0, [/* record */[
                                       /* name */str,
                                       /* age */state[/* age */1],
-                                      /* email */state[/* email */2],
-                                      /* id */state[/* id */3]
+                                      /* email */state[/* email */2]
                                     ]]);
                         });
                   case 1 : 
@@ -131,8 +114,7 @@ function make(friend, handleSubmit, _children) {
                           return /* Update */Block.__(0, [/* record */[
                                       /* name */state[/* name */0],
                                       /* age */str$1,
-                                      /* email */state[/* email */2],
-                                      /* id */state[/* id */3]
+                                      /* email */state[/* email */2]
                                     ]]);
                         });
                   case 2 : 
@@ -141,8 +123,7 @@ function make(friend, handleSubmit, _children) {
                           return /* Update */Block.__(0, [/* record */[
                                       /* name */state[/* name */0],
                                       /* age */state[/* age */1],
-                                      /* email */str$2,
-                                      /* id */state[/* id */3]
+                                      /* email */str$2
                                     ]]);
                         });
                   
@@ -156,10 +137,10 @@ function make(friend, handleSubmit, _children) {
 }
 
 export {
-  validatedFriendToJs ,
-  validatedFriendFromJs ,
   unvalidatedFriendToJs ,
   unvalidatedFriendFromJs ,
+  emptyFriend ,
+  toUnvalidated ,
   component ,
   make ,
   

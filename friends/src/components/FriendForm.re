@@ -7,7 +7,7 @@ type action =
   | ChangeField(field, string)
   | Submit;
 
-[@bs.deriving jsConverter]
+// [@bs.deriving jsConverter]
 type validatedFriend = {
   name: string,
   age: int,
@@ -31,20 +31,19 @@ let toUnvalidated =
 let component = ReasonReact.reducerComponent("FriendForm");
 
 [@genType]
-let make = (~initState: ReasonApp.editingState, ~handleSubmit, _children) => {
+let make = (~initState, ~handleSubmit, _children) => {
   let handleSubmit_ = state => {
     handleSubmit(state);
     ReasonReact.Update(emptyFriend);
   };
-  // let {name, age, email, id} = friend;
 
   {
     ...component,
 
     initialState: () => {
       switch (initState) {
-      | EditingNew => emptyFriend
-      | EditingExistent(f) => toUnvalidated(f)
+      | None => emptyFriend
+      | Some(f) => toUnvalidated(f)
       };
     },
 
