@@ -14,7 +14,6 @@ type validatedFriend = {
   email: string,
 };
 
-// [@bs.deriving jsConverter]
 type unvalidatedFriend = {
   name: string,
   age: string,
@@ -32,19 +31,11 @@ let toUnvalidated =
 
 let component = ReasonReact.reducerComponentWithRetainedProps("FriendForm");
 
-// [@genType]
 let make = (~initState=emptyFriend, ~handleSubmit, _children) => {
   {
     ...component,
 
     initialState: () => emptyFriend,
-    // initialState: () => {
-    //   switch (initState) {
-    //   | None => emptyFriend
-    //   | Some(f) => toUnvalidated(f)
-    //   };
-    // },
-    // initialState: () => initState,
 
     retainedProps: initState,
 
@@ -71,15 +62,7 @@ let make = (~initState=emptyFriend, ~handleSubmit, _children) => {
     },
 
     render: self => {
-      // Js.log(self);
-      // Js.log(("sanity", sanity));
-      // Js.log(("initState", initState));
       let {name, age, email} = self.state;
-      // let {name, age, email} =
-      //   switch (initState) {
-      //   | None => emptyFriend
-      //   | Some(f) => toUnvalidated(f)
-      //   };
       <form
         onSubmit={e => {
           ReactEvent.Form.preventDefault(e);

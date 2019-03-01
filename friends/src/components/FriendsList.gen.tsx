@@ -21,16 +21,17 @@ export type friend = {
 export type Props = {
   readonly data: friend[]; 
   readonly handleEdit: (_1:friend) => void; 
+  readonly handleDelete: (_1:number) => void; 
   readonly children?: unknown
 };
 
 export const FriendsList: React.ComponentClass<Props> = ReasonReact.wrapReasonForJs(
   FriendsListBS.component,
   (function _(jsProps: Props) {
-     return Curry._3(FriendsListBS.make, jsProps.data.map(function _element(ArrayItem: any) { return [ArrayItem.id, ArrayItem.name, ArrayItem.age, ArrayItem.email]}), function _(Arg1: any) {
+     return Curry._4(FriendsListBS.make, jsProps.data.map(function _element(ArrayItem: any) { return [ArrayItem.id, ArrayItem.name, ArrayItem.age, ArrayItem.email]}), function _(Arg1: any) {
   const result = jsProps.handleEdit({id:Arg1[0], name:Arg1[1], age:Arg1[2], email:Arg1[3]});
   return result
-}, jsProps.children);
+}, jsProps.handleDelete, jsProps.children);
   }));
 
 export default FriendsList;

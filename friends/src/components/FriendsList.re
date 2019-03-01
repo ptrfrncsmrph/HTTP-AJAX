@@ -9,7 +9,7 @@ type friend = {
 };
 
 [@genType]
-let make = (~data: Js.Array.t(friend), ~handleEdit, _children) => {
+let make = (~data: Js.Array.t(friend), ~handleEdit, ~handleDelete, _children) => {
   ...component,
   render: _self => {
     <table className="friends">
@@ -28,7 +28,7 @@ let make = (~data: Js.Array.t(friend), ~handleEdit, _children) => {
               let {id, name, age, email} = f;
               <tr key={id |> string_of_int}>
                 <td>
-                  <button className="danger">
+                  <button onClick={_e => handleDelete(id)} className="danger">
                     {"Delete" |> ReasonReact.string}
                   </button>
                 </td>

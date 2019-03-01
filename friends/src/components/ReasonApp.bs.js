@@ -73,6 +73,8 @@ function make(_children) {
                 }
                 tmp = React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(match[0], (function (f) {
                                 return Curry._1(send, /* EditFriend */Block.__(2, [f]));
+                              }), (function (id) {
+                                return Curry._1(send, /* DeleteFriend */Block.__(4, [id]));
                               }), /* array */[])), tmp$1);
               } else {
                 tmp = React.createElement("div", undefined, "Error");
@@ -157,7 +159,23 @@ function make(_children) {
                                   })
                               ]);
                   case 4 : 
-                      return /* NoUpdate */0;
+                      var id$1 = action[0];
+                      return /* UpdateWithSideEffects */Block.__(2, [
+                                /* tuple */[
+                                  s,
+                                  param[1]
+                                ],
+                                (function (param) {
+                                    var send = param[/* send */3];
+                                    Axios.delete(apiEndpoint + ("/" + String(id$1))).then((function (response) {
+                                              var fs = Json_decode.array(friend, response.data);
+                                              return Promise.resolve(Curry._1(send, /* FriendsGot */Block.__(0, [fs])));
+                                            })).catch((function (err) {
+                                            return Promise.resolve(Curry._1(send, /* GotError */Block.__(5, [err])));
+                                          }));
+                                    return /* () */0;
+                                  })
+                              ]);
                   case 5 : 
                       return /* Update */Block.__(0, [/* tuple */[
                                   /* Error */Block.__(0, [action[0]]),

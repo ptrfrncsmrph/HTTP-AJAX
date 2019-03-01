@@ -24,7 +24,7 @@ function friendFromJs(param) {
         ];
 }
 
-function make(data, handleEdit, _children) {
+function make(data, handleEdit, handleDelete, _children) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -49,10 +49,14 @@ function make(data, handleEdit, _children) {
                                                     key: field
                                                   }, field);
                                       })))), React.createElement("tbody", undefined, data.map((function (f) {
+                                    var id = f[/* id */0];
                                     return React.createElement("tr", {
-                                                key: String(f[/* id */0])
+                                                key: String(id)
                                               }, React.createElement("td", undefined, React.createElement("button", {
-                                                        className: "danger"
+                                                        className: "danger",
+                                                        onClick: (function (_e) {
+                                                            return Curry._1(handleDelete, id);
+                                                          })
                                                       }, "Delete")), React.createElement("td", undefined, React.createElement("button", {
                                                         onClick: (function (_e) {
                                                             return Curry._1(handleEdit, f);

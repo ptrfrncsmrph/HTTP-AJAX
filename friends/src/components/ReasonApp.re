@@ -39,7 +39,7 @@ let make = _children => {
 
   initialState: () => (Loading, EditingNew),
 
-  reducer: (action, (s, _e)) => {
+  reducer: (action, (s, e)) => {
     switch (action) {
     | GetFriends =>
       ReasonReact.UpdateWithSideEffects(
@@ -94,7 +94,22 @@ let make = _children => {
             |> ignore
           ),
       )
-    | DeleteFriend(_) => ReasonReact.NoUpdate
+    | DeleteFriend(id) =>
+      ReasonReact.UpdateWithSideEffects(
+        (s, e),
+        ({send}) =>
+          Js.Promise.(
+            Axios.delete(apiEndpoint ++ "/" ++ string_of_int(id))
+            |> then_(response =>
+                 response##data
+                 |> Json.Decode.(array(Decode.friend))
+                 |> (fs => send(FriendsGot(fs)))
+                 |> resolve
+               )
+            |> catch(err => send(GotError(err)) |> resolve)
+            |> ignore
+          ),
+      )
     | GotError(err) => ReasonReact.Update((Error(err), EditingNew))
     };
   },
@@ -109,7 +124,11 @@ let make = _children => {
        | (Loading, _) => <div> {"Loading" |> ReasonReact.string} </div>
        | (Loaded(data), e) =>
          <>
-           <FriendsList data handleEdit={f => send(EditFriend(f))} />
+           <FriendsList
+             data
+             handleEdit={f => send(EditFriend(f))}
+             handleDelete={id => send(DeleteFriend(id))}
+           />
            {switch (e) {
             | EditingExistent(f) =>
               <FriendForm
