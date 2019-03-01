@@ -48,29 +48,32 @@ function make(_children) {
               if (typeof match === "number") {
                 tmp = React.createElement("div", undefined, "Loading");
               } else if (match.tag) {
-                var match$1 = state[1];
-                var data = match[0];
-                if (match$1) {
-                  var f = match$1[0];
-                  tmp = React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(data, /* array */[])), ReasonReact.element(undefined, undefined, FriendForm$Friends.make(f, (function (param) {
-                                  return Curry._1(send, /* PutFriend */Block.__(2, [
-                                                f[/* id */0],
-                                                /* record */[
-                                                  /* name */param[/* name */0],
-                                                  /* age */Caml_format.caml_int_of_string(param[/* age */1]),
-                                                  /* email */param[/* email */2]
-                                                ]
-                                              ]));
-                                }), /* array */[])));
+                var e = state[1];
+                var tmp$1;
+                if (e) {
+                  var f = e[0];
+                  tmp$1 = ReasonReact.element(undefined, undefined, FriendForm$Friends.make(f, (function (param) {
+                              return Curry._1(send, /* PutFriend */Block.__(3, [
+                                            f[/* id */0],
+                                            /* record */[
+                                              /* name */param[/* name */0],
+                                              /* age */Caml_format.caml_int_of_string(param[/* age */1]),
+                                              /* email */param[/* email */2]
+                                            ]
+                                          ]));
+                            }), /* array */[]));
                 } else {
-                  tmp = React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(data, /* array */[])), ReasonReact.element(undefined, undefined, FriendForm$Friends.make(undefined, (function (param) {
-                                  return Curry._1(send, /* PostFriend */Block.__(1, [/* record */[
-                                                  /* name */param[/* name */0],
-                                                  /* age */Caml_format.caml_int_of_string(param[/* age */1]),
-                                                  /* email */param[/* email */2]
-                                                ]]));
-                                }), /* array */[])));
+                  tmp$1 = ReasonReact.element(undefined, undefined, FriendForm$Friends.make(undefined, (function (param) {
+                              return Curry._1(send, /* PostFriend */Block.__(1, [/* record */[
+                                              /* name */param[/* name */0],
+                                              /* age */Caml_format.caml_int_of_string(param[/* age */1]),
+                                              /* email */param[/* email */2]
+                                            ]]));
+                            }), /* array */[]));
                 }
+                tmp = React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(match[0], (function (f) {
+                                return Curry._1(send, /* EditFriend */Block.__(2, [f]));
+                              }), /* array */[])), tmp$1);
               } else {
                 tmp = React.createElement("div", undefined, "Error");
               }
@@ -86,6 +89,7 @@ function make(_children) {
             }),
           /* retainedProps */component[/* retainedProps */11],
           /* reducer */(function (action, param) {
+              var s = param[0];
               if (typeof action === "number") {
                 return /* UpdateWithSideEffects */Block.__(2, [
                           /* tuple */[
@@ -98,7 +102,7 @@ function make(_children) {
                                         var fs = Json_decode.array(friend, response.data);
                                         return Promise.resolve(Curry._1(send, /* FriendsGot */Block.__(0, [fs])));
                                       })).catch((function (err) {
-                                      return Promise.resolve(Curry._1(send, /* GotError */Block.__(4, [err])));
+                                      return Promise.resolve(Curry._1(send, /* GotError */Block.__(5, [err])));
                                     }));
                               return /* () */0;
                             })
@@ -114,7 +118,7 @@ function make(_children) {
                       var f = action[0];
                       return /* UpdateWithSideEffects */Block.__(2, [
                                 /* tuple */[
-                                  param[0],
+                                  s,
                                   /* EditingNew */0
                                 ],
                                 (function (param) {
@@ -123,15 +127,20 @@ function make(_children) {
                                               var fs = Json_decode.array(friend, response.data);
                                               return Promise.resolve(Curry._1(send, /* FriendsGot */Block.__(0, [fs])));
                                             })).catch((function (err) {
-                                            return Promise.resolve(Curry._1(send, /* GotError */Block.__(4, [err])));
+                                            return Promise.resolve(Curry._1(send, /* GotError */Block.__(5, [err])));
                                           }));
                                     return /* () */0;
                                   })
                               ]);
                   case 2 : 
+                      return /* Update */Block.__(0, [/* tuple */[
+                                  s,
+                                  /* EditingExistent */[action[0]]
+                                ]]);
                   case 3 : 
-                      return /* NoUpdate */0;
                   case 4 : 
+                      return /* NoUpdate */0;
+                  case 5 : 
                       return /* Update */Block.__(0, [/* tuple */[
                                   /* Error */Block.__(0, [action[0]]),
                                   /* EditingNew */0

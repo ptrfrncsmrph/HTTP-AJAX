@@ -18,12 +18,19 @@ export type friend = {
 };
 
 // tslint:disable-next-line:interface-over-type-literal
-export type Props = { readonly data: friend[]; readonly children?: unknown };
+export type Props = {
+  readonly data: friend[]; 
+  readonly handleEdit: (_1:friend) => void; 
+  readonly children?: unknown
+};
 
 export const FriendsList: React.ComponentClass<Props> = ReasonReact.wrapReasonForJs(
   FriendsListBS.component,
   (function _(jsProps: Props) {
-     return Curry._2(FriendsListBS.make, jsProps.data.map(function _element(ArrayItem: any) { return [ArrayItem.id, ArrayItem.name, ArrayItem.age, ArrayItem.email]}), jsProps.children);
+     return Curry._3(FriendsListBS.make, jsProps.data.map(function _element(ArrayItem: any) { return [ArrayItem.id, ArrayItem.name, ArrayItem.age, ArrayItem.email]}), function _(Arg1: any) {
+  const result = jsProps.handleEdit({id:Arg1[0], name:Arg1[1], age:Arg1[2], email:Arg1[3]});
+  return result
+}, jsProps.children);
   }));
 
 export default FriendsList;

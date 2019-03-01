@@ -15,6 +15,7 @@ type action =
   | GetFriends
   | FriendsGot(Js.Array.t(friend))
   | PostFriend(FriendForm.validatedFriend)
+  | EditFriend(friend)
   | PutFriend(int, FriendForm.validatedFriend)
   | DeleteFriend(int)
   | GotError(Js.Promise.error);
@@ -73,6 +74,7 @@ let make = _children => {
             |> ignore
           ),
       )
+    | EditFriend(f) => ReasonReact.Update((s, EditingExistent(f)))
     | PutFriend(_, _) => ReasonReact.NoUpdate
     | DeleteFriend(_) => ReasonReact.NoUpdate
     | GotError(err) => ReasonReact.Update((Error(err), EditingNew))
@@ -87,27 +89,30 @@ let make = _children => {
     <main className="App">
       {switch (state) {
        | (Loading, _) => <div> {"Loading" |> ReasonReact.string} </div>
-       | (Loaded(data), EditingNew) =>
+       | (Loaded(data), e) =>
          <>
-           <FriendsList data />
-           <FriendForm
-             initState=None
-             handleSubmit={({name, age: age_, email}) =>
-               send(PostFriend({name, age: int_of_string(age_), email}))
-             }
-           />
-         </>
-       | (Loaded(data), EditingExistent(f)) =>
-         <>
-           <FriendsList data />
-           <FriendForm
-             initState={Some(f)}
-             handleSubmit={({name, age: age_, email}) =>
-               send(
-                 PutFriend(f.id, {name, age: int_of_string(age_), email}),
-               )
-             }
-           />
+           <FriendsList data handleEdit={f => send(EditFriend(f))} />
+           {switch (e) {
+            | EditingExistent(f) =>
+              <FriendForm
+                initState={Some(f)}
+                handleSubmit={({name, age: age_, email}) =>
+                  send(
+                    PutFriend(
+                      f.id,
+                      {name, age: int_of_string(age_), email},
+                    ),
+                  )
+                }
+              />
+            | EditingNew =>
+              <FriendForm
+                initState=None
+                handleSubmit={({name, age: age_, email}) =>
+                  send(PostFriend({name, age: int_of_string(age_), email}))
+                }
+              />
+            }}
          </>
        | (Error(_err), _) => <div> {"Error" |> ReasonReact.string} </div>
        }}
