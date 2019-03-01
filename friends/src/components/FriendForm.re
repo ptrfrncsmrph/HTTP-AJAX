@@ -12,7 +12,6 @@ type validatedFriend = {
   name: string,
   age: int,
   email: string,
-  id: option(int),
 };
 
 [@bs.deriving jsConverter]
@@ -20,23 +19,34 @@ type unvalidatedFriend = {
   name: string,
   age: string,
   email: string,
-  id: option(int),
+};
+
+let emptyFriend: unvalidatedFriend = {name: "", email: "", age: ""};
+
+let toUnvalidated =
+    ({name, email, age: age_}: FriendsList.friend): unvalidatedFriend => {
+  {name, email, age: string_of_int(age_)};
 };
 
 let component = ReasonReact.reducerComponent("FriendForm");
 
 [@genType]
-let make = (~friend: unvalidatedFriend, ~handleSubmit, _children) => {
+let make = (~initState: ReasonApp.editingState, ~handleSubmit, _children) => {
   let handleSubmit_ = state => {
     handleSubmit(state);
-    ReasonReact.Update({name: "", age: "", email: "", id: None});
+    ReasonReact.Update(emptyFriend);
   };
-  let {name, age, email, id} = friend;
+  // let {name, age, email, id} = friend;
 
   {
     ...component,
 
-    initialState: () => {name, age, email, id},
+    initialState: () => {
+      switch (initState) {
+      | EditingNew => emptyFriend
+      | EditingExistent(f) => toUnvalidated(f)
+      };
+    },
 
     reducer: action => {
       switch (action) {
