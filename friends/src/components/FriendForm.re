@@ -35,12 +35,7 @@ let make = (~initState, ~handleSubmit, _children) => {
   {
     ...component,
 
-    initialState: () => {
-      switch (initState) {
-      | None => emptyFriend
-      | Some(f) => toUnvalidated(f)
-      };
-    },
+    initialState: () => emptyFriend,
 
     reducer: action => {
       switch (action) {
@@ -62,8 +57,12 @@ let make = (~initState, ~handleSubmit, _children) => {
       };
     },
 
-    render: ({state, send}) => {
-      let {name, age, email} = state;
+    render: ({send}) => {
+      let {name, age, email} =
+        switch (initState) {
+        | None => emptyFriend
+        | Some(f) => toUnvalidated(f)
+        };
       <form
         onSubmit={e => {
           ReactEvent.Form.preventDefault(e);

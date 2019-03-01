@@ -54,7 +54,7 @@ function make(data, handleEdit, _children) {
                                               }, React.createElement("td", undefined, React.createElement("button", {
                                                         className: "danger"
                                                       }, "Delete")), React.createElement("td", undefined, React.createElement("button", {
-                                                        onClick: (function (param) {
+                                                        onClick: (function (_e) {
                                                             return Curry._1(handleEdit, f);
                                                           })
                                                       }, "Edit")), React.createElement("td", undefined, f[/* name */1]), React.createElement("td", undefined, String(f[/* age */2])), React.createElement("td", undefined, f[/* email */3]));

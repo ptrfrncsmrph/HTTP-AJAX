@@ -49,8 +49,8 @@ function make(initState, handleSubmit, _children) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (param) {
-              var state = param[/* state */1];
               var send = param[/* send */3];
+              var match = initState !== undefined ? toUnvalidated(initState) : emptyFriend;
               return React.createElement("form", {
                           onSubmit: (function (e) {
                               e.preventDefault();
@@ -59,7 +59,7 @@ function make(initState, handleSubmit, _children) {
                         }, React.createElement("div", {
                               className: "input-container"
                             }, React.createElement("label", undefined, "Name", React.createElement("input", {
-                                      value: state[/* name */0],
+                                      value: match[/* name */0],
                                       onChange: (function (e) {
                                           return Curry._1(send, /* ChangeField */[
                                                       /* Name */0,
@@ -67,7 +67,7 @@ function make(initState, handleSubmit, _children) {
                                                     ]);
                                         })
                                     })), React.createElement("label", undefined, "Age", React.createElement("input", {
-                                      value: state[/* age */1],
+                                      value: match[/* age */1],
                                       onChange: (function (e) {
                                           return Curry._1(send, /* ChangeField */[
                                                       /* Age */1,
@@ -75,7 +75,7 @@ function make(initState, handleSubmit, _children) {
                                                     ]);
                                         })
                                     })), React.createElement("label", undefined, "Email", React.createElement("input", {
-                                      value: state[/* email */2],
+                                      value: match[/* email */2],
                                       onChange: (function (e) {
                                           return Curry._1(send, /* ChangeField */[
                                                       /* Email */2,
@@ -85,11 +85,7 @@ function make(initState, handleSubmit, _children) {
                                     }))), React.createElement("button", undefined, "Submit"));
             }),
           /* initialState */(function (param) {
-              if (initState !== undefined) {
-                return toUnvalidated(initState);
-              } else {
-                return emptyFriend;
-              }
+              return emptyFriend;
             }),
           /* retainedProps */component[/* retainedProps */11],
           /* reducer */(function (action) {

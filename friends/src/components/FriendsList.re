@@ -33,7 +33,7 @@ let make = (~data: Js.Array.t(friend), ~handleEdit, _children) => {
                   </button>
                 </td>
                 <td>
-                  <button onClick={_ => handleEdit(f)}>
+                  <button onClick={_e => handleEdit(f)}>
                     {"Edit" |> ReasonReact.string}
                   </button>
                 </td>
