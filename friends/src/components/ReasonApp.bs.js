@@ -4,19 +4,13 @@ import * as Block from "bs-platform/lib/es6/block.js";
 import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as Axios from "axios";
 import * as React from "react";
+import * as Caml_format from "bs-platform/lib/es6/caml_format.js";
 import * as Json_decode from "@glennsl/bs-json/src/Json_decode.bs.js";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 import * as FriendForm$Friends from "./FriendForm.bs.js";
 import * as FriendsList$Friends from "./FriendsList.bs.js";
 
 (( require("./App.scss") ));
-
-var emptyFriend = /* record */[
-  /* name */"",
-  /* age */"",
-  /* email */"",
-  /* id */undefined
-];
 
 function friend(json) {
   return /* record */[
@@ -54,12 +48,29 @@ function make(_children) {
               if (typeof match === "number") {
                 tmp = React.createElement("div", undefined, "Loading");
               } else if (match.tag) {
+                var match$1 = state[1];
                 var data = match[0];
-                tmp = state[1] ? React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(data, /* array */[])), ReasonReact.element(undefined, undefined, FriendForm$Friends.make(emptyFriend, (function (f) {
-                                  return Curry._1(send, /* PostFriend */Block.__(1, [f]));
-                                }), /* array */[]))) : React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(data, /* array */[])), ReasonReact.element(undefined, undefined, FriendForm$Friends.make(emptyFriend, (function (f) {
-                                  return Curry._1(send, /* PostFriend */Block.__(1, [f]));
+                if (match$1) {
+                  var f = match$1[0];
+                  tmp = React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(data, /* array */[])), ReasonReact.element(undefined, undefined, FriendForm$Friends.make(f, (function (param) {
+                                  return Curry._1(send, /* PutFriend */Block.__(2, [
+                                                f[/* id */0],
+                                                /* record */[
+                                                  /* name */param[/* name */0],
+                                                  /* age */Caml_format.caml_int_of_string(param[/* age */1]),
+                                                  /* email */param[/* email */2]
+                                                ]
+                                              ]));
                                 }), /* array */[])));
+                } else {
+                  tmp = React.createElement(React.Fragment, undefined, ReasonReact.element(undefined, undefined, FriendsList$Friends.make(data, /* array */[])), ReasonReact.element(undefined, undefined, FriendForm$Friends.make(undefined, (function (param) {
+                                  return Curry._1(send, /* PostFriend */Block.__(1, [/* record */[
+                                                  /* name */param[/* name */0],
+                                                  /* age */Caml_format.caml_int_of_string(param[/* age */1]),
+                                                  /* email */param[/* email */2]
+                                                ]]));
+                                }), /* array */[])));
+                }
               } else {
                 tmp = React.createElement("div", undefined, "Error");
               }
@@ -67,14 +78,14 @@ function make(_children) {
                           className: "App"
                         }, tmp);
             }),
-          /* initialState */(function (_state) {
+          /* initialState */(function (param) {
               return /* tuple */[
                       /* Loading */0,
                       /* EditingNew */0
                     ];
             }),
           /* retainedProps */component[/* retainedProps */11],
-          /* reducer */(function (action, _state) {
+          /* reducer */(function (action, param) {
               if (typeof action === "number") {
                 return /* UpdateWithSideEffects */Block.__(2, [
                           /* tuple */[
@@ -99,13 +110,33 @@ function make(_children) {
                                   /* Loaded */Block.__(1, [action[0]]),
                                   /* EditingNew */0
                                 ]]);
+                  case 1 : 
+                      var f = action[0];
+                      return /* UpdateWithSideEffects */Block.__(2, [
+                                /* tuple */[
+                                  param[0],
+                                  /* EditingNew */0
+                                ],
+                                (function (param) {
+                                    var send = param[/* send */3];
+                                    Axios.post(apiEndpoint, FriendForm$Friends.validatedFriendToJs(f)).then((function (response) {
+                                              var fs = Json_decode.array(friend, response.data);
+                                              return Promise.resolve(Curry._1(send, /* FriendsGot */Block.__(0, [fs])));
+                                            })).catch((function (err) {
+                                            return Promise.resolve(Curry._1(send, /* GotError */Block.__(4, [err])));
+                                          }));
+                                    return /* () */0;
+                                  })
+                              ]);
+                  case 2 : 
+                  case 3 : 
+                      return /* NoUpdate */0;
                   case 4 : 
                       return /* Update */Block.__(0, [/* tuple */[
                                   /* Error */Block.__(0, [action[0]]),
                                   /* EditingNew */0
                                 ]]);
-                  default:
-                    return /* NoUpdate */0;
+                  
                 }
               }
             }),
@@ -118,7 +149,6 @@ var jsComponent = ReasonReact.wrapReasonForJs(component, (function (_jsProps) {
       }));
 
 export {
-  emptyFriend ,
   Decode ,
   apiEndpoint ,
   component ,

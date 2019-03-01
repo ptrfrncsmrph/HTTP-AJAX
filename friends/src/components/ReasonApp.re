@@ -11,18 +11,11 @@ type editingState =
   | EditingExistent(friend)
   | EditingNew;
 
-let emptyFriend: FriendForm.unvalidatedFriend = {
-  name: "",
-  email: "",
-  age: "",
-  id: None,
-};
-
 type action =
   | GetFriends
   | FriendsGot(Js.Array.t(friend))
-  | PostFriend(FriendForm.unvalidatedFriend)
-  | PutFriend(int, FriendForm.unvalidatedFriend)
+  | PostFriend(FriendForm.validatedFriend)
+  | PutFriend(int, FriendForm.validatedFriend)
   | DeleteFriend(int)
   | GotError(Js.Promise.error);
 
@@ -43,9 +36,9 @@ let component = ReasonReact.reducerComponent("ReasonApp");
 let make = _children => {
   ...component,
 
-  initialState: _state => (Loading, EditingNew),
+  initialState: () => (Loading, EditingNew),
 
-  reducer: (action, _state) => {
+  reducer: (action, (s, _e)) => {
     switch (action) {
     | GetFriends =>
       ReasonReact.UpdateWithSideEffects(
@@ -64,7 +57,22 @@ let make = _children => {
           ),
       )
     | FriendsGot(fs) => ReasonReact.Update((Loaded(fs), EditingNew))
-    | PostFriend(_) => ReasonReact.NoUpdate
+    | PostFriend(f) =>
+      ReasonReact.UpdateWithSideEffects(
+        (s, EditingNew),
+        ({send}) =>
+          Js.Promise.(
+            Axios.postData(apiEndpoint, FriendForm.validatedFriendToJs(f))
+            |> then_(response =>
+                 response##data
+                 |> Json.Decode.(array(Decode.friend))
+                 |> (fs => send(FriendsGot(fs)))
+                 |> resolve
+               )
+            |> catch(err => send(GotError(err)) |> resolve)
+            |> ignore
+          ),
+      )
     | PutFriend(_, _) => ReasonReact.NoUpdate
     | DeleteFriend(_) => ReasonReact.NoUpdate
     | GotError(err) => ReasonReact.Update((Error(err), EditingNew))
@@ -83,16 +91,22 @@ let make = _children => {
          <>
            <FriendsList data />
            <FriendForm
-             friend=emptyFriend
-             handleSubmit={f => send(PostFriend(f))}
+             initState=None
+             handleSubmit={({name, age: age_, email}) =>
+               send(PostFriend({name, age: int_of_string(age_), email}))
+             }
            />
          </>
-       | (Loaded(data), EditingExistent(_)) =>
+       | (Loaded(data), EditingExistent(f)) =>
          <>
            <FriendsList data />
            <FriendForm
-             handleSubmit={f => send(PostFriend(f))}
-             friend=emptyFriend
+             initState={Some(f)}
+             handleSubmit={({name, age: age_, email}) =>
+               send(
+                 PutFriend(f.id, {name, age: int_of_string(age_), email}),
+               )
+             }
            />
          </>
        | (Error(_err), _) => <div> {"Error" |> ReasonReact.string} </div>

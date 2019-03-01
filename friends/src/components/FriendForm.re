@@ -7,14 +7,14 @@ type action =
   | ChangeField(field, string)
   | Submit;
 
-// [@bs.deriving jsConverter]
+[@bs.deriving jsConverter]
 type validatedFriend = {
   name: string,
   age: int,
   email: string,
 };
 
-[@bs.deriving jsConverter]
+// [@bs.deriving jsConverter]
 type unvalidatedFriend = {
   name: string,
   age: string,
@@ -32,11 +32,6 @@ let component = ReasonReact.reducerComponent("FriendForm");
 
 [@genType]
 let make = (~initState, ~handleSubmit, _children) => {
-  let handleSubmit_ = state => {
-    handleSubmit(state);
-    ReasonReact.Update(emptyFriend);
-  };
-
   {
     ...component,
 
@@ -58,7 +53,12 @@ let make = (~initState, ~handleSubmit, _children) => {
       | ChangeField(Email, str) => (
           state => ReasonReact.Update({...state, email: str})
         )
-      | Submit => handleSubmit_
+      | Submit => (
+          state => {
+            handleSubmit(state);
+            ReasonReact.Update(emptyFriend);
+          }
+        )
       };
     },
 

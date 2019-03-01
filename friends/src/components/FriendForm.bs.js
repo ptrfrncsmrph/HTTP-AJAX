@@ -5,7 +5,7 @@ import * as Curry from "bs-platform/lib/es6/curry.js";
 import * as React from "react";
 import * as ReasonReact from "reason-react/src/ReasonReact.js";
 
-function unvalidatedFriendToJs(param) {
+function validatedFriendToJs(param) {
   return {
           name: param[/* name */0],
           age: param[/* age */1],
@@ -13,7 +13,7 @@ function unvalidatedFriendToJs(param) {
         };
 }
 
-function unvalidatedFriendFromJs(param) {
+function validatedFriendFromJs(param) {
   return /* record */[
           /* name */param.name,
           /* age */param.age,
@@ -38,10 +38,6 @@ function toUnvalidated(param) {
 var component = ReasonReact.reducerComponent("FriendForm");
 
 function make(initState, handleSubmit, _children) {
-  var handleSubmit_ = function (state) {
-    Curry._1(handleSubmit, state);
-    return /* Update */Block.__(0, [emptyFriend]);
-  };
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -129,7 +125,10 @@ function make(initState, handleSubmit, _children) {
                   
                 }
               } else {
-                return handleSubmit_;
+                return (function (state) {
+                    Curry._1(handleSubmit, state);
+                    return /* Update */Block.__(0, [emptyFriend]);
+                  });
               }
             }),
           /* jsElementWrapped */component[/* jsElementWrapped */13]
@@ -137,8 +136,8 @@ function make(initState, handleSubmit, _children) {
 }
 
 export {
-  unvalidatedFriendToJs ,
-  unvalidatedFriendFromJs ,
+  validatedFriendToJs ,
+  validatedFriendFromJs ,
   emptyFriend ,
   toUnvalidated ,
   component ,
