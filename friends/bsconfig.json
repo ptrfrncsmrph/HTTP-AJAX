@@ -1,0 +1,34 @@
+{
+  "name": "friends",
+  "reason": {
+    "react-jsx": 2
+  },
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "package-specs": {
+    "module": "es6",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "bs-css",
+    "@glennsl/bs-json",
+    "reason-react",
+    "reason-future",
+    "bs-axios"
+  ],
+  "warnings": {
+    "error": "+101"
+  },
+  "namespace": true,
+  "refmt": 3,
+  "gentypeconfig": {
+    "language": "typescript",
+    "module": "es6",
+    "shims": {
+      "ReasonReact": "ReactShim"
+    }
+  }
+}
